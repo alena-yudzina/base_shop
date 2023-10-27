@@ -19,7 +19,7 @@ make run_local
 ```
 The service will be available at [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-Documentation for the service will be available at [http://127.0.0.1:8000/api/docs](http://127.0.0.1:8000/api/docs)
+Documentation for the service will be available at [http://127.0.0.1:8000/api/v1/docs](http://127.0.0.1:8000/api/v1/docs)
 
 ## Installation with docker
 1. Create and fill in the `.env` file similar to `.env.example`
@@ -29,7 +29,7 @@ make run_docker
 ```
 The service will be available at [http://127.0.0.1:80](http://127.0.0.1:80)
 
-Documentation for the service will be available at [http://127.0.0.1:80/api/docs](http://127.0.0.1:80/api/docs)
+Documentation for the service will be available at [http://127.0.0.1:80/api/v1/docs](http://127.0.0.1:80/api/v1/docs)
 
 ## Useful commands
 ```
