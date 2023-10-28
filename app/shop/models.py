@@ -25,9 +25,7 @@ class Product(models.Model):
 
 class Order(models.Model):
     price = models.DecimalField(
-        verbose_name="Итоговая сумма",
-        max_digits=10,
-        decimal_places=2
+        verbose_name="Итоговая сумма", max_digits=10, decimal_places=2
     )
 
     CREATED = "CREATED"

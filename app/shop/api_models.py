@@ -1,6 +1,7 @@
-from ninja import ModelSchema, Schema
-from shop.models import Order, Product, Payment
 from enum import Enum
+
+from ninja import ModelSchema, Schema
+from shop.models import Order, Payment, Product
 
 
 class ProductIn(ModelSchema):
@@ -22,7 +23,9 @@ class OrderIn(Schema):
 class OrderOut(ModelSchema):
     class Config:
         model = Order
-        model_fields = ["id", ]
+        model_fields = [
+            "id",
+        ]
 
 
 class ProductIn(ModelSchema):
@@ -44,4 +47,6 @@ class PaymentIn(Schema):
 class PaymentOut(ModelSchema):
     class Config:
         model = Payment
-        model_fields = ["id", ]
+        model_fields = [
+            "id",
+        ]
