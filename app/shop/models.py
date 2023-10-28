@@ -74,7 +74,7 @@ class Payment(models.Model):
     )
 
     CASH = "CASH"
-    CARD = "CASH"
+    CARD = "CARD"
     PAYMENT_CHOICES = ((CASH, "Наличные"), (CARD, "Карта"))
     payment_type = models.CharField(
         verbose_name="Тип оплаты", max_length=4, choices=PAYMENT_CHOICES
