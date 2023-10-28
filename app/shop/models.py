@@ -27,8 +27,7 @@ class Order(models.Model):
     price = models.DecimalField(
         verbose_name="Итоговая сумма",
         max_digits=10,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal("0.01"))],
+        decimal_places=2
     )
 
     CREATED = "CREATED"
