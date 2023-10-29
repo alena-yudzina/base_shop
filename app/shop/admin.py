@@ -5,8 +5,8 @@ import requests
 from django.conf import settings
 from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
+from requests.exceptions import HTTPError
 from shop import models
-from urllib3.exceptions import HTTPError
 
 
 def approve_order(order: models.Order) -> bool:
