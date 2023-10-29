@@ -1,6 +1,8 @@
 import json
+from unittest.mock import MagicMock, patch
 
 from django.test import Client, TestCase
+from shop.admin import approve_order
 from shop.models import Order, Payment, Product
 
 
@@ -172,7 +174,44 @@ class PaymentTests(TestCase):
             data=json.dumps(payment_data),
             content_type="json",
         )
-        print(result.json())
         self.assertEqual(result.status_code, 422)
         self.assertEqual(result.json(), expected_json)
         self.assertEqual(Payment.objects.all().count(), 0)
+
+
+class ApproveOrderTests(TestCase):
+    @patch("shop.models.Order.save")
+    @patch("shop.admin.settings.APPROVE_ORDER_URL", "http://example.com/approve-order")
+    @patch("requests.post")
+    def test_approve_order_success(self, mock_post, mock_save):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_post.return_value = mock_response
+
+        order = Order(id=1, price=10.0, status=Order.CREATED)
+        result = approve_order(order)
+
+        self.assertTrue(result)
+        mock_post.assert_called_once_with(
+            "http://example.com/approve-order",
+            data={"id": 1, "amount": 10.0, "date": order.confirmed_at},
+        )
+        mock_save.assert_called_once()
+
+    @patch("shop.models.Order.save")
+    @patch("shop.admin.settings.APPROVE_ORDER_URL", "http://example.com/approve-order")
+    @patch("requests.post")
+    def test_approve_order_failure(self, mock_post, mock_save):
+        mock_response = MagicMock()
+        mock_response.status_code = 400
+        mock_post.return_value = mock_response
+
+        order = Order(id=1, price=10.0, status=Order.CREATED)
+        result = approve_order(order)
+
+        self.assertFalse(result)
+        mock_post.assert_called_once_with(
+            "http://example.com/approve-order",
+            data={"id": 1, "amount": 10.0, "date": order.confirmed_at},
+        )
+        mock_save.assert_not_called()
