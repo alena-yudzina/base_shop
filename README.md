@@ -1,5 +1,5 @@
 # API for shop with admin panel
-## Installation
+## Installation without docker
 1. Create and activate virtual environment, install dependencies
 ```
 make install
@@ -9,9 +9,13 @@ make install
 ```
 make migrate
 ```
-4. Start the service
+4. Apply migrations
 ```
-make run_local
+make migrate
+```
+5. Create fake data (optional)
+```
+make fake_data
 ```
 The service will be available at [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
