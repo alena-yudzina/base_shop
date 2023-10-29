@@ -37,7 +37,7 @@ format:
 	@${ACTIVATE} black ${BLACK_ARGS}
 
 test: format
-	@${MANAGE} test
+	@${MANAGE} test app/shop/
 
 superuser:
 	@${MANAGE} createsuperuser --no-input
