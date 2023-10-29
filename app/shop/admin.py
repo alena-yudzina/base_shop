@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
 from shop import models
+from urllib3.exceptions import HTTPError
 
 
 def approve_order(order: models.Order) -> bool:
@@ -16,15 +17,14 @@ def approve_order(order: models.Order) -> bool:
 
     url = settings.APPROVE_ORDER_URL
     body = {"id": order.id, "amount": float(order.price), "date": order.confirmed_at}
-    print(body)
     response = requests.post(url, data=body)
     try:
         response.raise_for_status()
-    except Exception:
-        pass
-    else:
-        order.save()
-        return True
+    except HTTPError:
+        return False
+
+    order.save()
+    return True
 
 
 class PaymentInline(admin.TabularInline):
@@ -66,4 +66,3 @@ class OrderAdmin(admin.ModelAdmin):
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ("id", "amount", "status", "payment_type", "order")
     list_filter = ("status", "payment_type")
-    autocomplete_fields = ("order",)
