@@ -28,7 +28,7 @@ The service will be available at [http://127.0.0.1:80](http://127.0.0.1:80)
 
 Documentation for the service will be available at [http://127.0.0.1:80/api/v1/docs](http://127.0.0.1:80/api/v1/docs)
 
-## Useful development commands
+## Useful development commands when running without docker
 ```
 make superuser   # Creating a superuser
 make flash       # Database cleanup
