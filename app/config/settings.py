@@ -88,3 +88,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+APPROVE_ORDER_URL = os.environ.get(
+    "APPROVE_ORDER_URL", "https://webhook.site/36693e00-8f59-4f7b-9a85-1d1e7ddde4d4"
+)

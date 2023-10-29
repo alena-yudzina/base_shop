@@ -1,5 +1,30 @@
-from django.contrib import admin
+import time
+from datetime import datetime
+
+import requests
+from django.conf import settings
+from django.contrib import admin, messages
+from django.http import HttpResponseRedirect
 from shop import models
+
+
+def approve_order(order: models.Order) -> bool:
+    order.status = models.Order.CONFIRMED
+    order.confirmed_at = datetime.now()
+
+    time.sleep(3)
+
+    url = settings.APPROVE_ORDER_URL
+    body = {"id": order.id, "amount": float(order.price), "date": order.confirmed_at}
+    print(body)
+    response = requests.post(url, data=body)
+    try:
+        response.raise_for_status()
+    except Exception:
+        pass
+    else:
+        order.save()
+        return True
 
 
 class PaymentInline(admin.TabularInline):
@@ -21,6 +46,20 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ("status",)
     search_fields = ("id",)
     inlines = (PaymentInline,)
+
+    def response_change(self, request, obj):
+        if "_approve" in request.POST:
+            is_approved = approve_order(obj)
+            if is_approved:
+                self.message_user(request, "Заказ подтвержден")
+            else:
+                self.message_user(
+                    request,
+                    "Возникли проблемы с подтверждением заказа",
+                    level=messages.ERROR,
+                )
+            return HttpResponseRedirect(".")
+        return super().response_change(request, obj)
 
 
 @admin.register(models.Payment)
