@@ -5,7 +5,7 @@
 {% if show_save_as_new %}<input type="submit" value="{% translate 'Save as new' %}" name="_saveasnew">{% endif %}
 {% if show_save_and_add_another %}<input type="submit" value="{% translate 'Save and add another' %}" name="_addanother">{% endif %}
 {% if show_save_and_continue %}<input type="submit" value="{% if can_change %}{% translate 'Save and continue editing' %}{% else %}{% translate 'Save and view' %}{% endif %}" name="_continue">{% endif %}
-{% if original.payment.status == 'PAID' %}
+{% if original.is_paid %}
     <input type="submit" value="Подтвердить" class="default" name="_approve">
 {% endif %}
 {% if show_close %}
