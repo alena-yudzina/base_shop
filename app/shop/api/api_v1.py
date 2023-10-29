@@ -1,17 +1,15 @@
-from http import HTTPStatus
-
-from django.db import IntegrityError
+from django.db import transaction
 from ninja import Router
-from ninja.errors import HttpError
 from ninja.pagination import PageNumberPagination, paginate
-from shop import api_models, models
+from shop import models
+from shop.api import schemas
 
 router = Router()
 
 
 @router.get(
     "/products",
-    response=list[api_models.ProductOut],
+    response=list[schemas.ProductOut],
     summary="Получить список товаров",
 )
 @paginate(PageNumberPagination, page_size=10)
@@ -19,30 +17,21 @@ def get_products(request):
     return models.Product.objects.all()
 
 
-@router.post("/create_order", summary="Создать заказ", response=api_models.OrderOut)
-def create_order(request, order: api_models.OrderIn):
+@transaction.atomic
+@router.post("/create_order", summary="Создать заказ", response=schemas.OrderOut)
+def create_order(request, order: schemas.OrderIn):
     created_order = models.Order.objects.create(
         price=sum(product.price for product in order.products)
     )
-    try:
-        created_order.products.add(*(product.id for product in order.products))
-    except IntegrityError:
-        created_order.delete()
-        raise HttpError(HTTPStatus.BAD_REQUEST, "Wrong products ids")
-    return api_models.OrderOut(id=created_order.id)
+    products_ids = [product.id for product in order.products]
+    created_order.products.add(*products_ids)
+    return schemas.OrderOut(id=created_order.id)
 
 
-@router.post(
-    "/create_payment", summary="Создать платеж", response=api_models.PaymentOut
-)
-def create_payment(request, payment: api_models.PaymentIn):
-    order = models.Order.objects.filter(id=payment.order_id).first()
-    if not order:
-        raise HttpError(HTTPStatus.BAD_REQUEST, "Wrong order id")
-    try:
-        payment = models.Payment.objects.create(
-            amount=order.price, payment_type=payment.payment_type, order=order
-        )
-    except IntegrityError:
-        raise HttpError(HTTPStatus.BAD_REQUEST, "Payment already exists")
-    return api_models.PaymentOut(id=payment.id)
+@router.post("/create_payment", summary="Создать платеж", response=schemas.PaymentOut)
+def create_payment(request, payment: schemas.PaymentIn):
+    order = models.Order.objects.get(id=payment.order_id)
+    payment = models.Payment.objects.create(
+        amount=order.price, payment_type=payment.payment_type, order=order
+    )
+    return schemas.PaymentOut(id=payment.id)
