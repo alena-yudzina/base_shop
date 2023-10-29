@@ -9,11 +9,7 @@ make install
 ```
 make migrate
 ```
-4. Start the database
-```
-make db
-```
-5. Start the service
+4. Start the service
 ```
 make run_local
 ```
@@ -32,12 +28,13 @@ The service will be available at [http://127.0.0.1:80](http://127.0.0.1:80)
 
 Documentation for the service will be available at [http://127.0.0.1:80/api/v1/docs](http://127.0.0.1:80/api/v1/docs)
 
-## Useful commands
+## Useful development commands
 ```
 make superuser   # Creating a superuser
 make flash       # Database cleanup
 make test        # Running tests
 make format      # Running linter
+make fake_data   # Add fake data to db
 ```
 ## Database schema
 ![Schema](./imgs/models.png)

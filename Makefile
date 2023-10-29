@@ -28,7 +28,7 @@ run_docker:
 
 flush:
 	@echo "-> Flushing Database"
-	${MANAGE} flush
+	${MANAGE} flush --noinput
 
 format:
 	@echo "-> Run isort imports validation"
@@ -44,3 +44,6 @@ superuser:
 
 db_image:
 	@${MANAGE} graph_models -a -g -o imgs/models.png
+
+fake_data:
+	@${MANAGE} fake_data
