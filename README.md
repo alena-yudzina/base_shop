@@ -23,7 +23,8 @@ Documentation for the service will be available at [http://127.0.0.1:8000/api/v1
 
 ## Installation with docker
 1. Create and fill in the `.env` file similar to `.env.example`
-2. Run the command
+2. If you want to use PostgreSQL, set `USE_POSTGRES=True`
+3. Run the command
 ```
 make run_docker
 ```
