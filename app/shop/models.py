@@ -6,7 +6,9 @@ from django.db import models
 
 class Product(models.Model):
     name = models.CharField(verbose_name="Название", max_length=60)
-    image = models.ImageField(verbose_name="Изображение", upload_to="products/")
+    image = models.ImageField(
+        verbose_name="Изображение", upload_to="products/", null=True, blank=True
+    )
     content = models.TextField(verbose_name="Описание")
     price = models.DecimalField(
         verbose_name="Стоимость",
@@ -56,9 +58,7 @@ class Order(models.Model):
         return f"Заказ №{self.id}"
 
     def _is_paid(self):
-        if Payment.objects.filter(order=self):
-            return self.payment.status == Payment.PAID
-        return False
+        return bool(Payment.objects.filter(order=self, status=Payment.PAID))
 
     _is_paid.boolean = True
     is_paid = property(_is_paid)
@@ -87,8 +87,8 @@ class Payment(models.Model):
         verbose_name="Тип оплаты", max_length=4, choices=PAYMENT_CHOICES
     )
 
-    order = models.OneToOneField(
-        Order, on_delete=models.CASCADE, related_name="payment", verbose_name="Заказ"
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name="payments", verbose_name="Заказ"
     )
 
     class Meta:
