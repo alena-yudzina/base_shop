@@ -55,6 +55,15 @@ class Order(models.Model):
     def __str__(self):
         return f"Заказ №{self.id}"
 
+    def _is_paid(self):
+        if Payment.objects.filter(order=self):
+            return self.payment.status == Payment.PAID
+        return False
+
+    _is_paid.boolean = True
+    is_paid = property(_is_paid)
+    is_paid.fget.short_description = "Оплачен"
+
 
 class Payment(models.Model):
     amount = models.DecimalField(
