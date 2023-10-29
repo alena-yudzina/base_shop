@@ -1,0 +1,161 @@
+openapi: 3.0.2
+info:
+  title: NinjaAPI
+  version: 1.0.0
+  description: ''
+paths:
+  /api/v1/shop/products:
+    get:
+      operationId: shop_api_api_v1_get_products
+      summary: Получить список товаров
+      parameters:
+        - in: query
+          name: page
+          schema:
+            title: Page
+            default: 1
+            minimum: 1
+            type: integer
+          required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedProductOut'
+  /api/v1/shop/create_order:
+    post:
+      operationId: shop_api_api_v1_create_order
+      summary: Создать заказ
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderOut'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderIn'
+        required: true
+  /api/v1/shop/create_payment:
+    post:
+      operationId: shop_api_api_v1_create_payment
+      summary: Создать платеж
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentOut'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentIn'
+        required: true
+components:
+  schemas:
+    ProductOut:
+      title: ProductOut
+      type: object
+      properties:
+        id:
+          title: ID
+          type: integer
+        name:
+          title: Название
+          maxLength: 60
+          type: string
+        image:
+          title: Изображение
+          type: string
+        content:
+          title: Описание
+          type: string
+        price:
+          title: Стоимость
+          type: number
+      required:
+        - name
+        - image
+        - content
+        - price
+    PagedProductOut:
+      title: PagedProductOut
+      type: object
+      properties:
+        items:
+          title: Items
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductOut'
+        count:
+          title: Count
+          type: integer
+      required:
+        - items
+        - count
+    OrderOut:
+      title: OrderOut
+      type: object
+      properties:
+        id:
+          title: ID
+          type: integer
+    ProductIn:
+      title: ProductIn
+      type: object
+      properties:
+        id:
+          title: ID
+          type: integer
+        price:
+          title: Стоимость
+          type: number
+      required:
+        - price
+    OrderIn:
+      title: OrderIn
+      type: object
+      properties:
+        products:
+          title: Products
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductIn'
+      required:
+        - products
+    PaymentOut:
+      title: PaymentOut
+      type: object
+      properties:
+        id:
+          title: ID
+          type: integer
+    PaymentTypes:
+      title: PaymentTypes
+      description: An enumeration.
+      enum:
+        - CASH
+        - CARD
+      type: string
+    PaymentIn:
+      title: PaymentIn
+      type: object
+      properties:
+        order_id:
+          title: Order Id
+          type: integer
+        payment_type:
+          $ref: '#/components/schemas/PaymentTypes'
+      required:
+        - order_id
+        - payment_type
+servers: null
