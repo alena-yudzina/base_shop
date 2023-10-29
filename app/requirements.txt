@@ -1,5 +1,6 @@
 black==23.9.1
 Django==4.2.4
+django-extensions==3.2.3
 django-ninja==0.22.2
 graphviz==0.20.1
 isort==5.12.0
