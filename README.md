@@ -9,15 +9,15 @@ make install
 ```
 make migrate
 ```
-4. Apply migrations
-```
-make migrate
-```
-5. Create fake data (optional)
+4. Create fake data (optional)
 ```
 make fake_data
 ```
-The service will be available at [http://127.0.0.1:8000](http://127.0.0.1:8000)
+5. Run service
+```
+make run_local
+```
+The service will be available at [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
 
 Documentation for the service will be available at [http://127.0.0.1:8000/api/v1/docs](http://127.0.0.1:8000/api/v1/docs)
 
@@ -28,7 +28,7 @@ Documentation for the service will be available at [http://127.0.0.1:8000/api/v1
 ```
 make run_docker
 ```
-The service will be available at [http://127.0.0.1:80](http://127.0.0.1:80)
+The service will be available at [http://127.0.0.1:80/admin](http://127.0.0.1:80/admin)
 
 Documentation for the service will be available at [http://127.0.0.1:80/api/v1/docs](http://127.0.0.1:80/api/v1/docs)
 

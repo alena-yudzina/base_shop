@@ -54,7 +54,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-USE_POSTGRES = os.environ.get("USE_POSTGRES", "True") == "True"
+USE_POSTGRES = os.environ.get("USE_POSTGRES", "False") == "True"
 if USE_POSTGRES:
     DATABASES = {
         "default": {
